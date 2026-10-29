@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Apostila MAE0119 — Probabilidade e Inferência em 7 dias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Young+Serif&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" async></script>
+<style>
+:root{
+  color-scheme: light;
+  --papel:#F6F8FB;
+  --grade:rgba(40,80,160,.07);
+  --superficie:#FFFFFF;
+  --tinta:#1B2433;
+  --tinta-suave:#4A5568;
+  --azul:#1F4FA8;
+  --azul-claro:#E7EEFB;
+  --marca:#FFE766;
+  --marca-texto:#1B2433;
+  --vermelho:#C2362C;
+  --vermelho-claro:#FCECEA;
+  --verde:#1E7A4F;
+  --verde-claro:#E5F4EC;
+  --linha:#D7DEEA;
+  --area:rgba(31,79,168,.28);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --papel:#121822; --grade:rgba(120,160,230,.07); --superficie:#1A2230;
+    --tinta:#E6EBF3; --tinta-suave:#A9B4C6; --azul:#8DB1F5; --azul-claro:#1E2C46;
+    --marca:#6B5A12; --marca-texto:#FFF6C8; --vermelho:#F08A80; --vermelho-claro:#3A2020;
+    --verde:#7FD0A6; --verde-claro:#17322A; --linha:#2C374A; --area:rgba(141,177,245,.35);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --papel:#121822; --grade:rgba(120,160,230,.07); --superficie:#1A2230;
+  --tinta:#E6EBF3; --tinta-suave:#A9B4C6; --azul:#8DB1F5; --azul-claro:#1E2C46;
+  --marca:#6B5A12; --marca-texto:#FFF6C8; --vermelho:#F08A80; --vermelho-claro:#3A2020;
+  --verde:#7FD0A6; --verde-claro:#17322A; --linha:#2C374A; --area:rgba(141,177,245,.35);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;
+  background-color:var(--papel);
+  background-image:
+    linear-gradient(var(--grade) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grade) 1px, transparent 1px);
+  background-size:22px 22px;
+  color:var(--tinta);
+  font-family:"Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size:1.0625rem;
+  line-height:1.6;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--superficie)}
+h1,h2,h3{font-family:"Young Serif", Georgia, "Times New Roman", serif;font-weight:400;line-height:1.2;color:var(--tinta)}
+h2{font-size:2rem;margin:0 0 .4rem}
+h3{font-size:1.3rem;margin:2.2rem 0 .6rem}
+p{margin:.7rem 0}
+a{color:var(--azul)}
+strong{font-weight:700}
+.coluna{max-width:44rem;margin:0 auto;padding:0 1.15rem}
+
+/* navegação */
+nav.topo{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:9;
+  background:var(--superficie);border-bottom:1px solid var(--linha);
+}
+nav.topo .trilho{display:flex;gap:.4rem;overflow-x:auto;padding:.6rem 1rem;max-width:56rem;margin:0 auto;scrollbar-width:none}
+nav.topo .trilho::-webkit-scrollbar{display:none}
+nav.topo a{
+  flex:0 0 auto;text-decoration:none;color:var(--tinta);font-size:.9rem;
+  padding:.35rem .75rem;border-radius:999px;border:1px solid var(--linha);background:var(--papel);white-space:nowrap
+}
+nav.topo a:hover,nav.topo a:focus-visible{border-color:var(--azul);color:var(--azul);outline:none}
+
+/* capa */
+header.capa{padding:2.6rem 0 1rem}
+header.capa h1{font-size:clamp(2.3rem,8vw,3.6rem);margin:.2rem 0 .8rem}
+header.capa .sub{font-size:1.15rem;color:var(--tinta-suave);max-width:34rem}
+.sino-capa{width:100%;height:auto;display:block;margin:1.2rem 0 0}
+
+/* seções */
+section.modulo{padding:2.6rem 0 1rem;border-top:2px solid var(--linha);margin-top:2rem}
+.dia{display:inline-block;font-size:.9rem;color:var(--azul);background:var(--azul-claro);border-radius:999px;padding:.15rem .7rem;margin-bottom:.6rem}
+.ideia{
+  font-family:"Young Serif", Georgia, serif;font-size:1.3rem;line-height:1.4;
+  margin:1rem 0 1.4rem;padding-left:1rem;border-left:4px solid var(--azul)
+}
+
+/* caixas */
+.caixa{background:var(--superficie);border:1px solid var(--linha);border-radius:10px;padding:1rem 1.1rem;margin:1.1rem 0}
+.caixa > :first-child{margin-top:0}
+.caixa > :last-child{margin-bottom:0}
+.caixa h4{margin:0 0 .4rem;font-size:1rem}
+.def{border-left:5px solid var(--azul)}
+.def h4{color:var(--azul)}
+.formula{
+  background:var(--superficie);border-radius:10px;padding:.6rem 1rem;margin:1rem 0;overflow-x:auto;
+  border:1px solid var(--linha)
+}
+.formula mjx-container{margin:.3rem 0 !important}
+.marca{background:linear-gradient(transparent 12%, var(--marca) 12%, var(--marca) 88%, transparent 88%);color:var(--marca-texto);padding:0 .15em;border-radius:2px}
+.caneta{
+  font-family:"Caveat", "Comic Sans MS", cursive;font-size:1.45rem;line-height:1.25;color:var(--vermelho);
+  background:var(--vermelho-claro);border-radius:10px;padding:.7rem 1rem;margin:1.1rem 0;
+  transform:rotate(-.4deg)
+}
+.caneta b{font-weight:600;text-decoration:underline}
+.dica{background:var(--verde-claro);border-left:5px solid var(--verde);border-radius:10px;padding:.8rem 1rem;margin:1.1rem 0}
+.dica b{color:var(--verde)}
+
+/* exemplos passo a passo */
+.exemplo{background:var(--superficie);border:1px solid var(--linha);border-radius:10px;padding:1rem 1.1rem;margin:1.2rem 0}
+.exemplo .enun{font-weight:700;margin:0 0 .5rem}
+.exemplo ol{margin:.4rem 0 0;padding-left:1.3rem}
+.exemplo li{margin:.35rem 0}
+.resp{display:inline-block;margin-top:.6rem;font-weight:700;color:var(--verde)}
+
+/* teste-se */
+details.teste{background:var(--superficie);border:1px dashed var(--azul);border-radius:10px;margin:.8rem 0;padding:.2rem 1rem}
+details.teste summary{cursor:pointer;padding:.7rem 0;font-weight:700;list-style:none}
+details.teste summary::-webkit-details-marker{display:none}
+details.teste summary::before{content:"＋ ";color:var(--azul)}
+details.teste[open] summary::before{content:"－ "}
+details.teste .gab{border-top:1px solid var(--linha);padding:.6rem 0 .8rem}
+.titulo-teste{margin-top:2.2rem}
+
+/* tabelas */
+.rolagem{overflow-x:auto;margin:1rem 0}
+table{border-collapse:collapse;width:100%;font-size:.97rem;background:var(--superficie)}
+th,td{border:1px solid var(--linha);padding:.45rem .6rem;text-align:left;vertical-align:top}
+th{background:var(--azul-claro);font-weight:700}
+
+/* figuras */
+figure{margin:1rem 0}
+figcaption{font-size:.9rem;color:var(--tinta-suave);margin-top:.3rem}
+svg.sino{width:100%;max-width:340px;height:auto;display:block}
+.casos{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.8rem;margin:1rem 0}
+.caso{background:var(--superficie);border:1px solid var(--linha);border-radius:10px;padding:.6rem}
+.caso p{margin:.3rem 0 0;font-size:.92rem}
+
+/* calculadora */
+.calc{background:var(--superficie);border:2px solid var(--azul);border-radius:12px;padding:1rem 1.1rem;margin:1.4rem 0}
+.calc h4{margin:0 0 .5rem;font-family:"Young Serif",Georgia,serif;font-weight:400;font-size:1.2rem}
+.campos{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.6rem;margin:.6rem 0}
+.campos label{display:flex;flex-direction:column;font-size:.9rem;color:var(--tinta-suave);gap:.2rem}
+.campos input{font:inherit;color:var(--tinta);background:var(--papel);border:1px solid var(--linha);border-radius:8px;padding:.45rem .55rem;width:100%}
+.campos input:focus-visible{outline:2px solid var(--azul);outline-offset:1px}
+.saida{font-size:1.05rem;margin:.6rem 0 0}
+.saida .num{font-size:1.6rem;font-weight:700;color:var(--azul)}
+
+/* plano */
+ol.plano{list-style:none;padding:0;margin:1rem 0;counter-reset:dia}
+ol.plano li{display:flex;gap:.8rem;align-items:flex-start;background:var(--superficie);border:1px solid var(--linha);border-radius:10px;padding:.75rem .9rem;margin:.55rem 0}
+ol.plano input{width:1.35rem;height:1.35rem;margin-top:.2rem;accent-color:var(--verde);flex:0 0 auto}
+ol.plano .t{font-weight:700}
+ol.plano .d{font-size:.95rem;color:var(--tinta-suave)}
+ol.plano li.feito{opacity:.6}
+ol.plano li.feito .t{text-decoration:line-through}
+.progresso{height:8px;border-radius:999px;background:var(--linha);overflow:hidden;margin:.4rem 0 0}
+.progresso span{display:block;height:100%;width:0;background:var(--verde);transition:width .3s}
+
+/* alvos */
+.alvos{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;margin:1rem 0}
+.alvo{background:var(--superficie);border:1px solid var(--linha);border-radius:10px;padding:.6rem;text-align:center}
+.alvo svg{width:100%;max-width:150px;height:auto}
+.alvo p{margin:.2rem 0 0;font-size:.9rem}
+
+footer{padding:3rem 0 4rem;color:var(--tinta-suave);font-size:.95rem}
+mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
+</style>
+</head>
+<body>
+
+<nav class="topo" aria-label="Conteúdos">
+  <div class="trilho">
+    <a href="#plano">Plano</a>
+    <a href="#normal">1 Normal</a>
+    <a href="#continuas">2 Contínuas</a>
+    <a href="#bivariadas">3 Bivariadas</a>
+    <a href="#somas">4 Somas</a>
+    <a href="#inferencia">5 Estimadores</a>
+    <a href="#ic">6 Intervalos</a>
+    <a href="#prova">Na prova</a>
+  </div>
+</nav>
+
+<main class="coluna">
+
+<header class="capa">
+  <h1>Estatística em 7 dias</h1>
+  <p class="sub">Apostila de MAE0119 para quem precisa aprender do zero até a prova. Cada conteúdo começa pela intuição, depois vem a fórmula, um exemplo resolvido passo a passo e exercícios para você se testar.</p>
+  <svg class="sino-capa" id="sinoCapa" viewBox="0 0 700 170" role="img" aria-label="Curva Normal com a área central destacada"></svg>
+</header>
+
+<section id="plano">
+  <h2>Seu plano</h2>
+  <p>Um conteúdo por dia, nesta ordem. Cada um depende do anterior, então não pule. Marque o dia quando terminar: o progresso fica salvo neste aparelho.</p>
+  <div class="progresso" aria-hidden="true"><span id="barra"></span></div>
+  <ol class="plano" id="listaDias">
+    <li><input type="checkbox" id="d1"><label for="d1"><span class="t">Dia 1 — Distribuição Normal</span><br><span class="d">Padronizar, usar a tabela, achar valores. Lista 06: 7, 8, 9, 11. Slides 6 a 9 do V7.</span></label></li>
+    <li><input type="checkbox" id="d2"><label for="d2"><span class="t">Dia 2 — Variáveis contínuas, Uniforme e Exponencial</span><br><span class="d">Integrar densidades, falta de memória. Lista 06: 1 a 6 e 13.</span></label></li>
+    <li><input type="checkbox" id="d3"><label for="d3"><span class="t">Dia 3 — Duas variáveis ao mesmo tempo</span><br><span class="d">Conjunta, marginal, condicional, independência. Lista 08: 1, 2, 3.</span></label></li>
+    <li><input type="checkbox" id="d4"><label for="d4"><span class="t">Dia 4 — Soma de variáveis</span><br><span class="d">Média e variância de somas, soma de Normais. Lista 08: 4 a 10.</span></label></li>
+    <li><input type="checkbox" id="d5"><label for="d5"><span class="t">Dia 5 — Estimadores e Teorema Limite Central</span><br><span class="d">Viés, eficiência, consistência, distribuição da média. Lista 09: 1 a 4 e 6.</span></label></li>
+    <li><input type="checkbox" id="d6"><label for="d6"><span class="t">Dia 6 — Intervalos de confiança</span><br><span class="d">Média com z e com t, proporção, tamanho da amostra. Lista 09: 5, 7 a 13.</span></label></li>
+    <li><input type="checkbox" id="d7"><label for="d7"><span class="t">Dia 7 — Revisão</span><br><span class="d">Releia “Na prova”, refaça um exercício de cada dia sem olhar a resolução.</span></label></li>
+  </ol>
+  <div class="dica"><b>Como estudar cada dia:</b> leia o conteúdo uma vez com calma (uns 40 minutos), depois passe o resto do tempo fazendo exercício com lápis e papel. Em estatística, ler sem resolver dá a sensação de que entendeu, mas não fixa. Travou mais de 15 minutos num exercício? Pule e volte depois.</div>
+</section>
+
+<!-- ============ MÓDULO 1 ============ -->
+<section class="modulo" id="normal">
+  <span class="dia">Dia 1</span>
+  <h2>A distribuição Normal</h2>
+  <p class="ideia">Quase tudo nesta matéria acaba numa conta com a Normal. Aprenda a transformar qualquer Normal na Normal padrão e a ler a tabela, e metade da prova está resolvida.</p>
+
+  <h3>De onde vem o sino</h3>
+  <p>Pense na altura das pessoas, no peso de pacotes que saem de uma máquina, no erro de uma medição. Os valores se amontoam perto de uma média, e quanto mais longe dela, mais raros ficam. Desenhando isso, sai uma curva em forma de sino: a <strong>distribuição Normal</strong>.</p>
+  <p>Ela é controlada por só dois números:</p>
+  <ul>
+    <li>\(\mu\) (mi), a <strong>média</strong>: onde fica o pico. Mudar \(\mu\) arrasta o sino para os lados.</li>
+    <li>\(\sigma\) (sigma), o <strong>desvio padrão</strong>: quão espalhado é o sino. \(\sigma\) grande deixa o sino baixo e largo; \(\sigma\) pequeno, alto e fino.</li>
+  </ul>
+  <p>Escrevemos \(X \sim N(\mu, \sigma^2)\). Repare: o segundo número é a <strong>variância</strong> \(\sigma^2\), não o desvio.</p>
+  <div class="caneta">Erro nº 1 da prova: <b>N(50, 81)</b> quer dizer variância 81, então σ = 9. Se você usar 81 na conta, erra a questão inteira.</div>
+
+  <div class="caixa def">
+    <h4>O que você precisa saber sobre o sino</h4>
+    <p>É simétrico em torno de \(\mu\). Por isso \(\mu\) é ao mesmo tempo média, mediana e ponto mais alto. A área total embaixo dele é 1, então cada metade vale 0,5. Os pontos onde a curva muda de curvatura ficam em \(\mu \pm \sigma\).</p>
+  </div>
+
+  <h3>Padronizar: colocar tudo na mesma régua</h3>
+  <p>Imagine que você tirou 7 numa prova em que a turma teve média 5 e desvio 1, e sua amiga tirou 80 numa prova com média 70 e desvio 20. Quem foi melhor? Comparar 7 com 80 não faz sentido. O jeito é perguntar: <em>quantos desvios padrão cada um ficou acima da média?</em> Você ficou 2 desvios acima; ela, 0,5. Você foi melhor.</p>
+  <p>Esse número “quantos desvios acima ou abaixo da média” é o <strong>Z</strong>:</p>
+  <div class="formula">\[ Z = \frac{X - \mu}{\sigma} \qquad\Longleftrightarrow\qquad X = \mu + Z\,\sigma \]</div>
+  <p>Se \(X\) é Normal, \(Z\) é Normal com média 0 e desvio 1, a <strong>Normal padrão</strong> \(N(0,1)\). Como existe uma tabela só para ela, qualquer pergunta sobre qualquer Normal vira uma consulta nessa tabela.</p>
+
+  <h3>Como ler a tabela do curso</h3>
+  <p>A tabela (Tabela III do Bussab) dá a área entre 0 e um valor \(z\), isto é, \(P(0 \lt Z \lt z)\). Para achar \(z = 1{,}96\): linha <strong>1,9</strong> (parte inteira e primeira casa), coluna <strong>6</strong> (segunda casa). O valor é 0,47500. Ou seja, 47,5% da área fica entre 0 e 1,96.</p>
+  <p>Ela só dá esse pedaço. Todo o resto você monta usando duas coisas: cada metade vale 0,5, e o sino é simétrico. Veja os casos:</p>
+  <div class="casos" id="casosTabela"></div>
+  <div class="dica"><b>Hábito que salva prova:</b> antes de qualquer conta, desenhe um sininho e pinte a área que a questão pede. Leva cinco segundos e evita somar quando era para subtrair.</div>
+
+  <div class="calc" id="calc">
+    <h4>Calculadora para conferir suas contas</h4>
+    <p>Coloque a média, o desvio e os limites. Deixe um limite vazio para “até o infinito”. Use para conferir, não no lugar da tabela: na prova você só terá a tabela.</p>
+    <div class="campos">
+      <label>Média µ<input id="cMu" type="number" step="any" value="50" inputmode="decimal"></label>
+      <label>Desvio σ<input id="cSig" type="number" step="any" value="9" inputmode="decimal"></label>
+      <label>De (a)<input id="cA" type="number" step="any" value="" placeholder="−∞" inputmode="decimal"></label>
+      <label>Até (b)<input id="cB" type="number" step="any" value="75" placeholder="+∞" inputmode="decimal"></label>
+    </div>
+    <svg class="sino" id="calcSino" viewBox="0 0 320 120" role="img" aria-label="Área calculada sob a curva"></svg>
+    <p class="saida" id="calcSaida"></p>
+  </div>
+
+  <h3>Exemplos resolvidos, passo a passo</h3>
+  <div class="exemplo">
+    <p class="enun">X ~ N(50, 81). Quanto vale P(X ≤ 75)?</p>
+    <ol>
+      <li>Ache σ: variância 81, então σ = 9.</li>
+      <li>Padronize: z = (75 − 50)/9 = 2,78.</li>
+      <li>Desenhe: área à esquerda de 2,78, ou seja, a metade esquerda inteira mais o pedaço de 0 a 2,78.</li>
+      <li>Tabela: linha 2,7, coluna 8 → 0,49728.</li>
+      <li>Some: 0,5 + 0,49728.</li>
+    </ol>
+    <span class="resp">P(X ≤ 75) = 0,9973</span>
+  </div>
+  <div class="exemplo">
+    <p class="enun">X ~ N(50, 81). Quanto vale P(|X − 50| ≤ 10)?</p>
+    <ol>
+      <li>Traduza o módulo: |X − 50| ≤ 10 significa 40 ≤ X ≤ 60.</li>
+      <li>Padronize as duas pontas: (40 − 50)/9 = −1,11 e (60 − 50)/9 = 1,11.</li>
+      <li>É um intervalo simétrico em torno de 0: dois pedaços iguais.</li>
+      <li>Tabela em 1,11 → 0,36650. Dobre.</li>
+    </ol>
+    <span class="resp">P = 0,7330</span>
+  </div>
+
+  <h3>O caminho inverso: dada a probabilidade, achar o valor</h3>
+  <p>Muitas questões perguntam ao contrário: “qual o peso que só 10% dos pacotes ficam abaixo?”. Aí você procura a probabilidade <em>no meio</em> da tabela e lê o \(z\) na margem.</p>
+  <div class="exemplo">
+    <p class="enun">Tempo de prova ~ N(100, 15²). Em quanto tempo 95% dos alunos terminam?</p>
+    <ol>
+      <li>Queremos c com P(X ≤ c) = 0,95. Desenhe: 95% à esquerda, 5% na cauda direita. Então c está acima da média.</li>
+      <li>Área entre 0 e z: 0,95 − 0,5 = 0,45.</li>
+      <li>No miolo da tabela, 0,45 fica entre 1,64 (0,44950) e 1,65 (0,45053). Use z = 1,645.</li>
+      <li>Volte para X: c = µ + zσ = 100 + 1,645 × 15.</li>
+    </ol>
+    <span class="resp">c ≈ 124,7 minutos</span>
+  </div>
+  <p>Vale decorar estes valores, porque aparecem o tempo todo:</p>
+  <div class="rolagem"><table>
+    <tr><th>Área central</th><th>Cada cauda</th><th>z</th></tr>
+    <tr><td>80%</td><td>10%</td><td>1,28</td></tr>
+    <tr><td>90%</td><td>5%</td><td>1,645</td></tr>
+    <tr><td>95%</td><td>2,5%</td><td>1,96</td></tr>
+    <tr><td>98%</td><td>1%</td><td>2,33</td></tr>
+    <tr><td>99%</td><td>0,5%</td><td>2,576</td></tr>
+  </table></div>
+
+  <h3>Desigualdade de Chebyshev</h3>
+  <p>E se você não souber que a variável é Normal? Chebyshev dá uma garantia que vale para <strong>qualquer</strong> distribuição, só sabendo média e variância:</p>
+  <div class="formula">\[ P(|X-\mu| \gt a) \le \frac{Var(X)}{a^2} \qquad\text{ou, com } a = k\sigma:\qquad P(|X-\mu| \lt k\sigma) \ge 1-\frac{1}{k^2} \]</div>
+  <p>Como ela precisa funcionar até para as distribuições mais estranhas, a garantia é bem fraca. Compare:</p>
+  <div class="rolagem"><table>
+    <tr><th>Distância da média</th><th>Chebyshev garante pelo menos</th><th>Se for Normal, é</th></tr>
+    <tr><td>2 desvios</td><td>75%</td><td>95,4%</td></tr>
+    <tr><td>3 desvios</td><td>88,9%</td><td>99,7%</td></tr>
+    <tr><td>4 desvios</td><td>93,7%</td><td>99,99%</td></tr>
+  </table></div>
+  <p>Ela volta no Dia 5: é a ferramenta que prova que a média amostral se aproxima da média verdadeira.</p>
+
+  <h3 class="titulo-teste">Teste-se</h3>
+  <details class="teste"><summary>Z ~ N(0,1). Calcule P(−1,88 &lt; Z &lt; 1,5).</summary>
+    <div class="gab">As pontas estão em lados opostos do zero: some os dois pedaços. tab(1,88) = 0,46995 e tab(1,50) = 0,43319. <strong>Resposta: 0,9031.</strong></div></details>
+  <details class="teste"><summary>Z ~ N(0,1). Ache c com P(Z ≥ c) = 0,90.</summary>
+    <div class="gab">90% à direita de c significa que c está à esquerda do zero, com 40% entre c e 0. Na tabela, 0,40 → 1,28. <strong>c = −1,28.</strong></div></details>
+  <details class="teste"><summary>Lista 06, ex. 9: coelhos ~ N(5; 0,8²). Os 20% mais leves são pequenos, os 55% seguintes médios, os 15% seguintes grandes e os 10% mais pesados extras. Ache os limites.</summary>
+    <div class="gab">Os cortes ficam nas posições acumuladas 20%, 75% e 90%. Os z são −0,84, 0,675 e 1,28. Usando x = 5 + 0,8z: <strong>pequeno até 4,33 kg; médio de 4,33 a 5,54 kg; grande de 5,54 a 6,02 kg; extra acima de 6,02 kg.</strong></div></details>
+  <details class="teste"><summary>Classe04: diâmetro ~ N(10, 4). Se diferir da média em mais de 3 mm, o anel vale R$ 5; senão, R$ 10. Qual o preço médio?</summary>
+    <div class="gab">σ = 2, então 3 mm é 1,5 desvio. P(|Z| &gt; 1,5) = 2(0,5 − 0,43319) = 0,13362. Preço médio = 5 × 0,13362 + 10 × 0,86638. <strong>R$ 9,33.</strong> (A Lista 06, ex. 12, é a mesma conta.)</div></details>
+  <details class="teste"><summary>Lista 06, ex. 11(c): a máquina de refrigerante muda para média 1.200 e desvio 20. O que acontece com a porcentagem de garrafas a até 2 desvios da média?</summary>
+    <div class="gab">Nada: continua 95,45%. A porcentagem só depende de quantos desvios você se afasta, não dos valores de µ e σ. É exatamente por isso que a padronização funciona.</div></details>
+</section>
+
+<!-- ============ MÓDULO 2 ============ -->
+<section class="modulo" id="continuas">
+  <span class="dia">Dia 2</span>
+  <h2>Variáveis contínuas: Uniforme e Exponencial</h2>
+  <p class="ideia">Numa variável contínua, probabilidade é área embaixo da curva. Calcular probabilidade é integrar.</p>
+
+  <h3>Por que área?</h3>
+  <p>Uma variável discreta assume valores contáveis (0, 1, 2…), e cada um tem sua probabilidade. Uma contínua, como um tempo ou um peso, pode assumir qualquer valor num intervalo. São infinitos valores, então cada valor isolado tem probabilidade zero: a chance de um pacote pesar exatamente 500,000000… g é nula.</p>
+  <p>O que faz sentido é perguntar sobre <strong>intervalos</strong>. A função densidade \(f(x)\) é uma curva, e a probabilidade de cair entre \(a\) e \(b\) é a área embaixo dela nesse trecho:</p>
+  <div class="formula">\[ P(a \lt X \lt b) = \int_a^b f(x)\,dx \]</div>
+  <p>Consequência prática: em contínuas, tanto faz \(\lt\) ou \(\le\). O resultado é o mesmo.</p>
+
+  <div class="caixa def">
+    <h4>Para ser uma densidade, f precisa de duas coisas</h4>
+    <p>1. Nunca ser negativa: \(f(x) \ge 0\). 2. Ter área total 1: \(\int_{-\infty}^{\infty} f(x)\,dx = 1\). Se a questão traz uma constante \(c\), é a segunda condição que determina \(c\).</p>
+  </div>
+
+  <h3>As três ferramentas</h3>
+  <div class="formula">\[ F(x) = P(X \le x) = \int_{-\infty}^{x} f(u)\,du \qquad E(X)=\int x\,f(x)\,dx \qquad Var(X)=E(X^2)-[E(X)]^2 \]</div>
+  <p>\(F\) é a <strong>acumulada</strong>: a área desde o começo até \(x\). E a derivada de \(F\) devolve \(f\). A <strong>média</strong> \(E(X)\) é o ponto de equilíbrio da figura: se a densidade é simétrica em torno de um ponto, a média é esse ponto, sem fazer conta.</p>
+
+  <div class="exemplo">
+    <p class="enun">Lista 06, ex. 2: vida útil com f(x) = (3/2)(1 − x²) em (0, 1) ano. (a) P(vida &gt; 6 meses)? (b) Vida média?</p>
+    <ol>
+      <li>Seis meses é x = 1/2. Integre de 1/2 a 1: (3/2)[x − x³/3] de 1/2 a 1.</li>
+      <li>Em 1: 1 − 1/3 = 2/3. Em 1/2: 1/2 − 1/24 = 11/24. Diferença: 16/24 − 11/24 = 5/24.</li>
+      <li>Multiplique por 3/2: 5/16 = 0,3125.</li>
+      <li>Média: (3/2)∫₀¹ x(1 − x²) dx = (3/2)(1/2 − 1/4) = 3/8 de ano.</li>
+    </ol>
+    <span class="resp">(a) 0,3125 &nbsp; (b) 3/8 ano = 4,5 meses</span>
+  </div>
+
+  <h3>Uniforme: tudo igualmente provável</h3>
+  <p>O ônibus chega “a qualquer momento” entre 6:00 e 6:30, sem preferência. A densidade é uma reta horizontal, um retângulo de área 1:</p>
+  <div class="formula">\[ X \sim U(a,b): \quad f(x)=\frac{1}{b-a}\ \text{em } [a,b] \qquad E(X)=\frac{a+b}{2} \qquad Var(X)=\frac{(b-a)^2}{12} \]</div>
+  <p>Não precisa integrar: probabilidade = <strong>comprimento do trecho ÷ comprimento total</strong>. Chance de o ônibus chegar depois de 6:10? Sobram 20 dos 30 minutos: 2/3.</p>
+
+  <h3>Exponencial: tempo de espera</h3>
+  <p>Tempo até a próxima falha de uma máquina, até um cliente chegar, até um reparo terminar. Valores pequenos são mais comuns, valores grandes vão ficando raros, e a curva cai rápido:</p>
+  <div class="formula">\[ X \sim Exp(\lambda): \quad f(x)=\lambda e^{-\lambda x},\ x\gt 0 \qquad \boxed{P(X\gt t)=e^{-\lambda t}} \qquad E(X)=\frac{1}{\lambda} \qquad Var(X)=\frac{1}{\lambda^2} \]</div>
+  <p>A fórmula com caixa resolve quase toda questão sem integrar. \(\lambda\) é a <strong>taxa</strong>: λ = 2 reparos por hora quer dizer, em média, meia hora por reparo.</p>
+  <div class="caneta">Leia com atenção se o enunciado deu a <b>taxa</b> ou a <b>média</b>. “Média de 20 segundos” significa λ = 1/20, não λ = 20.</div>
+
+  <h3>Falta de memória</h3>
+  <p>A Exponencial tem uma propriedade estranha: ela “não lembra” quanto tempo já passou. Se um reparo já dura 3 horas, a chance de durar mais meia hora é a mesma de um reparo novinho durar mais de meia hora:</p>
+  <div class="formula">\[ P(X \gt s+t \mid X \gt s) = P(X \gt t) \]</div>
+  <p>É como uma lâmpada que não envelhece: queimar no próximo minuto tem sempre a mesma chance, tenha ela 1 hora ou 1 ano de uso. A Exponencial é a <strong>única</strong> contínua assim.</p>
+  <p>A Uniforme, ao contrário, tem memória. Se são 6:15 e o ônibus não veio, ele com certeza chega nos próximos 15 minutos: o tempo que passou mudou a situação. A Lista 06 compara as duas de propósito:</p>
+  <div class="rolagem"><table>
+    <tr><th></th><th>Ônibus, U(0, 30) min</th><th>Reparo, Exp(2) por hora</th></tr>
+    <tr><td>Esperar mais que…</td><td>P(X &gt; 10) = 20/30 = 2/3</td><td>P(T &gt; 0,5) = e<sup>−1</sup> = 0,368</td></tr>
+    <tr><td>Dado que já esperou…</td><td>P(X &gt; 25 | X &gt; 15) = 5/15 = 1/3</td><td>P(T &gt; 3,5 | T &gt; 3) = e<sup>−1</sup> = 0,368</td></tr>
+    <tr><td>Conclusão</td><td>Mudou: tem memória</td><td>Igual: sem memória</td></tr>
+  </table></div>
+
+  <h3>Bônus: simular qualquer variável (Lista 06, ex. 13)</h3>
+  <p>Se \(U\) é Uniforme(0,1), então \(X = F^{-1}(U)\) tem a distribuição \(F\). Para a Exponencial, resolva \(u = 1-e^{-\lambda x}\) e saia com \(x = -\ln(1-u)/\lambda\). É assim que o computador gera números de qualquer distribuição a partir de números uniformes.</p>
+
+  <h3 class="titulo-teste">Teste-se</h3>
+  <details class="teste"><summary>Lista 06, ex. 1(g): f(x) = (2 + x)/4 em [−2, 0) e (2 − x)/4 em [0, 2]. É densidade?</summary>
+    <div class="gab">É um triângulo de base 4 (de −2 a 2) e altura f(0) = 1/2. Área = 4 × 0,5/2 = 1, e f nunca é negativa. <strong>Sim, é densidade.</strong></div></details>
+  <details class="teste"><summary>Lista 06, ex. 5: T ~ Exp(3). Calcule P(T &lt; 1), P(T &gt; 1 | T ≤ 2) e o valor a com P(T ≤ a) = 0,4.</summary>
+    <div class="gab">P(T &lt; 1) = 1 − e<sup>−3</sup> = <strong>0,9502</strong>. Condicional: P(1 &lt; T ≤ 2)/P(T ≤ 2) = (e<sup>−3</sup> − e<sup>−6</sup>)/(1 − e<sup>−6</sup>) = <strong>0,0474</strong>. Por fim, 1 − e<sup>−3a</sup> = 0,4 dá a = −ln(0,6)/3 = <strong>0,170 min</strong>.</div></details>
+  <details class="teste"><summary>Lista 06, ex. 6(b): pane uniforme numa rede de 10 km. Reparo custa R$ 200 até 3 km, R$ 400 entre 3 e 8 km, R$ 1.000 acima de 8 km. Custo médio?</summary>
+    <div class="gab">As chances são os comprimentos ÷ 10: 0,3, 0,5 e 0,2. Média = 200 × 0,3 + 400 × 0,5 + 1000 × 0,2. <strong>R$ 460.</strong></div></details>
+  <details class="teste"><summary>Vírus com vida Exponencial de média 20 s. Calcule P(T &gt; 15 | T &gt; 10).</summary>
+    <div class="gab">λ = 1/20. Pela falta de memória, é P(T &gt; 5) = e<sup>−5/20</sup> = <strong>0,7788</strong>.</div></details>
+</section>
+
+<!-- ============ MÓDULO 3 ============ -->
+<section class="modulo" id="bivariadas">
+  <span class="dia">Dia 3</span>
+  <h2>Duas variáveis ao mesmo tempo</h2>
+  <p class="ideia">A distribuição conjunta diz tudo sobre o par. A marginal é o que sobra quando você ignora uma das variáveis; a condicional é o que acontece quando você fixa uma delas.</p>
+
+  <h3>Começando pelo caso discreto</h3>
+  <p>Discreto é mais fácil de visualizar porque cabe numa tabela. Cada célula é P(X = x, Y = y), e a tabela toda soma 1. Veja o exemplo dos slides (B1):</p>
+  <div class="rolagem"><table>
+    <tr><th>y \ x</th><th>1</th><th>2</th><th>3</th><th>P(Y = y)</th></tr>
+    <tr><th>0</th><td>0,1</td><td>0,1</td><td>0,1</td><td><strong>0,3</strong></td></tr>
+    <tr><th>1</th><td>0,2</td><td>0</td><td>0,3</td><td><strong>0,5</strong></td></tr>
+    <tr><th>2</th><td>0</td><td>0,1</td><td>0,1</td><td><strong>0,2</strong></td></tr>
+    <tr><th>P(X = x)</th><td><strong>0,3</strong></td><td><strong>0,2</strong></td><td><strong>0,5</strong></td><td>1</td></tr>
+  </table></div>
+  <p><strong>Marginal</strong>: somou as linhas e as colunas e escreveu nas margens (daí o nome). P(X = 1) = 0,1 + 0,2 + 0 = 0,3. Você “esqueceu” o Y.</p>
+  <p><strong>Condicional</strong>: fixou um valor e olhou só aquela linha ou coluna, reescalando para somar 1. Sabendo que Y = 0, só a primeira linha importa: P(X = 1 | Y = 0) = 0,1/0,3 = 1/3.</p>
+  <p><strong>Independência</strong>: X e Y são independentes se cada célula é o produto das margens. Aqui, a célula (x = 2, y = 1) vale 0, mas 0,2 × 0,5 = 0,1. Basta uma célula falhar: <strong>não são independentes</strong>.</p>
+
+  <h3>No contínuo, é a mesma ideia com integral</h3>
+  <p>A tabela vira uma superfície \(f(x,y)\) sobre o plano, e a probabilidade vira volume. Cada operação tem sua versão:</p>
+  <div class="rolagem"><table>
+    <tr><th>Operação</th><th>Discreto</th><th>Contínuo</th></tr>
+    <tr><td>Conjunta</td><td>P(X = x, Y = y), soma 1</td><td>f(x, y) ≥ 0, volume total 1</td></tr>
+    <tr><td>Marginal de X</td><td>soma em y</td><td>integra em y: f<sub>X</sub>(x) = ∫ f(x, y) dy</td></tr>
+    <tr><td>Condicional de Y dado X = x</td><td>P(x, y)/P(X = x)</td><td>f(x, y)/f<sub>X</sub>(x)</td></tr>
+    <tr><td>Independência</td><td>P(x, y) = P(x)·P(y) sempre</td><td>f(x, y) = f<sub>X</sub>(x)·f<sub>Y</sub>(y) sempre</td></tr>
+  </table></div>
+  <div class="caneta">A regra que mais tira ponto: para a marginal de X, você integra em <b>y</b> (a outra variável). E os limites dessa integral saem do desenho do suporte.</div>
+
+  <h3>Sempre desenhe o suporte</h3>
+  <p>O suporte é a região onde \(f(x,y) \gt 0\). Os limites de integração vêm dele. Exemplo dos slides (B3, item a): \(f(x,y) = 1/x\) para \(0 \lt y \le x \lt 1\).</p>
+  <figure>
+    <svg class="sino" viewBox="0 0 220 200" role="img" aria-label="Suporte triangular abaixo da diagonal y = x">
+      <line x1="30" y1="170" x2="200" y2="170" stroke="currentColor" stroke-width="1.5"/>
+      <line x1="30" y1="170" x2="30" y2="15" stroke="currentColor" stroke-width="1.5"/>
+      <polygon points="30,170 180,170 180,20" fill="var(--area)" stroke="var(--azul)" stroke-width="2"/>
+      <line x1="30" y1="170" x2="180" y2="20" stroke="var(--azul)" stroke-dasharray="4 3"/>
+      <line x1="105" y1="170" x2="105" y2="95" stroke="var(--vermelho)" stroke-width="3"/>
+      <text x="196" y="186" font-size="13" fill="currentColor">x</text>
+      <text x="14" y="22" font-size="13" fill="currentColor">y</text>
+      <text x="176" y="186" font-size="12" fill="currentColor">1</text>
+      <text x="108" y="120" font-size="12" fill="var(--vermelho)">x fixo</text>
+      <text x="120" y="70" font-size="12" fill="var(--azul)">y = x</text>
+    </svg>
+    <figcaption>O suporte é o triângulo abaixo da diagonal. Fixando x (traço vermelho), y vai de 0 até x.</figcaption>
+  </figure>
+  <div class="exemplo">
+    <p class="enun">Ache as marginais de f(x, y) = 1/x em 0 &lt; y ≤ x &lt; 1.</p>
+    <ol>
+      <li>Marginal de X: fixe x e integre em y. Pelo desenho, y vai de 0 a x: f<sub>X</sub>(x) = ∫₀ˣ (1/x) dy = 1. Então X ~ Uniforme(0, 1).</li>
+      <li>Marginal de Y: fixe y e integre em x. Agora x vai de y a 1: f<sub>Y</sub>(y) = ∫ᵧ¹ (1/x) dx = −ln y, para 0 &lt; y &lt; 1.</li>
+      <li>Condicional: f(y | x) = (1/x)/1 = 1/x em (0, x). Dado X = x, Y é Uniforme(0, x).</li>
+      <li>Independência: o suporte não é um retângulo (o limite de y depende de x). Logo, não são independentes.</li>
+    </ol>
+  </div>
+  <div class="dica"><b>Atalho de independência:</b> se o suporte não for um retângulo, as variáveis já não são independentes, sem conta nenhuma. Se for retângulo e a fórmula se separar em (algo só de x) × (algo só de y), são independentes.</div>
+
+  <h3>Covariância e correlação</h3>
+  <p>A covariância mede se as variáveis andam juntas. Positiva: quando uma está acima da média, a outra tende a estar também. Negativa: uma sobe, a outra desce.</p>
+  <div class="formula">\[ Cov(X,Y)=E(XY)-E(X)E(Y) \qquad \rho=\frac{Cov(X,Y)}{\sqrt{Var(X)\,Var(Y)}},\quad -1\le\rho\le 1 \]</div>
+  <p>A correlação \(\rho\) é a covariância “sem unidade”, sempre entre −1 e 1. Vale ±1 só quando uma é função linear exata da outra.</p>
+  <div class="caneta">Independentes ⇒ Cov = 0. Mas <b>Cov = 0 não garante independência</b>. Cai em verdadeiro ou falso.</div>
+  <p>No exemplo da tabela: E(X) = 2,2, E(Y) = 0,9 e E(XY) = 2,1, então Cov = 2,1 − 1,98 = 0,12.</p>
+
+  <h3 class="titulo-teste">Teste-se</h3>
+  <details class="teste"><summary>Lista 08, ex. 2: f(x, y) = (3/2)x²y em 0 &lt; x &lt; 1, 0 &lt; y &lt; 2. Calcule P(X &gt; 1/2, Y &lt; 1), as marginais e diga se são independentes.</summary>
+    <div class="gab">A integral se separa: (3/2) × ∫ de 1/2 a 1 de x² dx × ∫₀¹ y dy = (3/2)(7/24)(1/2) = <strong>7/32 ≈ 0,219</strong>. Marginais: f<sub>X</sub> = 3x² em (0,1) e f<sub>Y</sub> = y/2 em (0,2). Como 3x² × y/2 = f(x, y) e o suporte é retângulo, <strong>são independentes</strong>.</div></details>
+  <details class="teste"><summary>No exemplo da tabela, calcule E(X), Var(X) e P(Y = 2 | X = 3).</summary>
+    <div class="gab">E(X) = 1(0,3) + 2(0,2) + 3(0,5) = <strong>2,2</strong>. E(X²) = 0,3 + 0,8 + 4,5 = 5,6, então Var(X) = 5,6 − 4,84 = <strong>0,76</strong>. P(Y = 2 | X = 3) = 0,1/0,5 = <strong>0,2</strong>.</div></details>
+  <details class="teste"><summary>B3, item c: f(x, y) = x e<sup>−x(y+1)</sup> para x, y &gt; 0. Ache as marginais.</summary>
+    <div class="gab">f<sub>X</sub>(x) = ∫₀^∞ x e<sup>−x</sup>e<sup>−xy</sup> dy = e<sup>−x</sup>, uma Exponencial(1). f<sub>Y</sub>(y) = ∫₀^∞ x e<sup>−x(y+1)</sup> dx = <strong>1/(y + 1)²</strong>. O produto não dá f, então não são independentes (mesmo com suporte retangular, a fórmula não se separa).</div></details>
+  <details class="teste"><summary>Lista 08, ex. 1(e): f(x, y) = x(x − y)/8, 0 &lt; x &lt; 2, −x &lt; y &lt; x. Ache f(y | x) e E(Y | X = x).</summary>
+    <div class="gab">Primeiro f<sub>X</sub>(x) = ∫ de −x a x de x(x − y)/8 dy = x³/4. Então f(y | x) = (x − y)/(2x²) em (−x, x). E(Y | X = x) = ∫ y(x − y)/(2x²) dy = <strong>−x/3</strong>. Repare que a resposta depende de x, como o enunciado avisa.</div></details>
+</section>
+
+<!-- ============ MÓDULO 4 ============ -->
+<section class="modulo" id="somas">
+  <span class="dia">Dia 4</span>
+  <h2>Soma de variáveis</h2>
+  <p class="ideia">Médias sempre se somam. Variâncias só se somam direto quando as variáveis são independentes. E soma de Normais independentes continua Normal.</p>
+
+  <h3>Por que isso importa</h3>
+  <p>“Peso total de 4 pacotes”, “tempo total de 81 conversas”, “média de 20 vigas”: toda a parte de inferência é feita de somas. Este dia é a ponte entre probabilidade e estatística.</p>
+
+  <h3>As regras</h3>
+  <div class="formula">\[ E(aX+bY+c)=aE(X)+bE(Y)+c \]
+  \[ Var(aX+bY+c)=a^2Var(X)+b^2Var(Y)+2ab\,Cov(X,Y) \]</div>
+  <p>Lendo em português:</p>
+  <ul>
+    <li>A constante \(c\) desloca a média mas não espalha nada, então some da variância.</li>
+    <li>Multiplicar por \(a\) multiplica a variância por \(a^2\) (variância está em “unidade ao quadrado”).</li>
+    <li>Se X e Y forem independentes, Cov = 0 e o último termo desaparece.</li>
+  </ul>
+  <div class="caneta">Var(X − Y) com independentes é Var(X) <b>+</b> Var(Y). Variância nunca se subtrai: tirar uma coisa incerta de outra só aumenta a incerteza.</div>
+
+  <h3>Soma de n cópias e a armadilha do “4X”</h3>
+  <p>Se \(X_1,\dots,X_n\) são independentes, todas com média \(\mu\) e variância \(\sigma^2\):</p>
+  <div class="formula">\[ S = X_1+\dots+X_n:\quad E(S)=n\mu,\ \ Var(S)=n\sigma^2 \qquad\qquad \bar X=\frac{S}{n}:\quad E(\bar X)=\mu,\ \ Var(\bar X)=\frac{\sigma^2}{n} \]</div>
+  <p>Agora compare com pegar <em>um</em> pacote e multiplicar por 4. A média é a mesma (4µ), mas a variância de 4X é 16σ², enquanto a da soma de 4 pacotes diferentes é 4σ². A soma varia menos porque um pacote pesado tende a ser compensado por um leve.</p>
+  <div class="caneta">“Peso total de 4 pacotes” é X₁ + X₂ + X₃ + X₄, com variância <b>4σ²</b>. Nunca 4X.</div>
+
+  <h3>Soma de Normais</h3>
+  <div class="formula">\[ X_i \sim N(\mu_i,\sigma_i^2)\ \text{independentes} \ \Longrightarrow\ X_1+\dots+X_k \sim N\!\left(\textstyle\sum \mu_i,\ \sum \sigma_i^2\right) \]</div>
+  <p>Com isso, toda conta de soma de Normais volta para o Dia 1: ache a nova média e a nova variância, padronize e use a tabela.</p>
+
+  <div class="exemplo">
+    <p class="enun">Lista 08, ex. 8 (= Lista 09, ex. 2): a máquina enche pacotes N(µ, 10²). (a) Regule µ para só 10% ficarem abaixo de 500 g. (b) Qual a chance de 4 pacotes somarem menos de 2 kg?</p>
+    <ol>
+      <li>(a) 10% abaixo de 500 → 500 está 1,28 desvio abaixo da média: 500 = µ − 1,28 × 10. Então µ = 512,8 g.</li>
+      <li>(b) Soma de 4: média 4 × 512,8 = 2051,2 e variância 4 × 100 = 400, logo σ = 20.</li>
+      <li>Padronize: (2000 − 2051,2)/20 = −2,56.</li>
+      <li>P(Z &lt; −2,56) = 0,5 − 0,49477.</li>
+    </ol>
+    <span class="resp">(a) µ = 512,8 g &nbsp; (b) 0,0052</span>
+  </div>
+  <div class="exemplo">
+    <p class="enun">Lista 08, ex. 6: elevador aguenta 500 kg; pesos ~ N(70, 100). Chance de 7 pessoas passarem do limite?</p>
+    <ol>
+      <li>Soma de 7: N(490, 700), σ = √700 = 26,46.</li>
+      <li>z = (500 − 490)/26,46 = 0,38.</li>
+      <li>P(Z &gt; 0,38) = 0,5 − 0,14803.</li>
+    </ol>
+    <span class="resp">≈ 0,352 (com 6 pessoas: N(420, 600), P(Z &gt; 3,27) ≈ 0,0005)</span>
+  </div>
+
+  <h3>Problemas de encontro: probabilidade como área</h3>
+  <p>Quando duas chegadas são uniformes e independentes, o par (X, Y) é um ponto sorteado num quadrado. Probabilidade = área favorável ÷ área total.</p>
+  <figure>
+    <svg class="sino" viewBox="0 0 220 210" role="img" aria-label="Quadrado 20 por 20 com faixa diagonal onde os trens se encontram">
+      <rect x="30" y="20" width="160" height="160" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <polygon points="30,180 30,148 158,20 190,20 190,60 70,180" fill="var(--area)" stroke="var(--azul)" stroke-width="2"/>
+      <text x="22" y="196" font-size="12" fill="currentColor">0</text>
+      <text x="184" y="196" font-size="12" fill="currentColor">20</text>
+      <text x="110" y="204" font-size="13" fill="currentColor">X</text>
+      <text x="10" y="104" font-size="13" fill="currentColor">Y</text>
+      <text x="8" y="26" font-size="12" fill="currentColor">20</text>
+      <text x="44" y="60" font-size="11" fill="currentColor">Y chega 4+ min</text>
+      <text x="44" y="73" font-size="11" fill="currentColor">depois: desencontro</text>
+      <text x="118" y="150" font-size="11" fill="currentColor">X chega 5+ min</text>
+      <text x="118" y="163" font-size="11" fill="currentColor">depois</text>
+    </svg>
+    <figcaption>Lista 08, ex. 5: trens chegam U(0, 20); X fica 4 min, Y fica 5 min. A faixa azul é onde eles se encontram.</figcaption>
+  </figure>
+  <p>Fora da faixa ficam dois triângulos: um de lados 16 (área 128) e outro de lados 15 (área 112,5). P(encontro) = (400 − 240,5)/400 ≈ <strong>0,399</strong>.</p>
+
+  <h3>Normal bivariada, em uma frase cada</h3>
+  <p>É o par de Normais com correlação \(\rho\). Suas marginais são Normais. Suas condicionais também, com média que anda em linha reta conforme o valor fixado. E, só nela, \(\rho = 0\) já garante independência.</p>
+  <div class="formula">\[ Y \mid X=x_0 \ \sim\ N\!\left(\mu_Y+\rho\frac{\sigma_Y}{\sigma_X}(x_0-\mu_X),\ \ \sigma_Y^2(1-\rho^2)\right) \]</div>
+
+  <h3 class="titulo-teste">Teste-se</h3>
+  <details class="teste"><summary>Lista 08, ex. 9: com µ = 512,8, tira-se uma amostra de 4 pacotes por hora. Para-se a produção se a média for menor que 495 ou maior que 520. (a) Chance de parada desnecessária? (b) Se µ caiu para 500, chance de não parar?</summary>
+    <div class="gab">A média de 4 tem variância 100/4 = 25, σ = 5. (a) P(X̄ &lt; 495) + P(X̄ &gt; 520) = P(Z &lt; −3,56) + P(Z &gt; 1,44) ≈ 0,0002 + 0,0749 = <strong>0,075</strong>. (b) Com µ = 500: P(495 ≤ X̄ ≤ 520) = P(−1 ≤ Z ≤ 4) = 0,34134 + 0,49997 ≈ <strong>0,841</strong>.</div></details>
+  <details class="teste"><summary>Lista 08, ex. 10: café ~ N(200, 10²), amostra de 25 pacotes. (a) Número esperado com menos de 205 g? (b) Chance de o total não passar de 5125 g?</summary>
+    <div class="gab">(a) P(X &lt; 205) = P(Z &lt; 0,5) = 0,6915; esperados 25 × 0,6915 ≈ <strong>17,3 pacotes</strong>. (b) Total ~ N(5000, 2500), σ = 50: P(Z ≤ 2,5) = <strong>0,9938</strong>.</div></details>
+  <details class="teste"><summary>Lista 08, ex. 4: um amigo chega às 20h30 e espera exatos 15 min; o outro chega uniforme entre 20h e 21h e vai embora na hora. Chance de se encontrarem?</summary>
+    <div class="gab">O pontual está lá de 30 a 45 min. O outro precisa chegar nessa janela de 15 dos 60 minutos: <strong>0,25</strong>. Desencontro por até 5 min: chegar entre 25 e 30 ou entre 45 e 50, isto é, 10/60 = <strong>1/6</strong>.</div></details>
+</section>
+
+<!-- ============ MÓDULO 5 ============ -->
+<section class="modulo" id="inferencia">
+  <span class="dia">Dia 5</span>
+  <h2>Estimadores e o Teorema Limite Central</h2>
+  <p class="ideia">Não dá para medir a população inteira, então usamos uma amostra. O estimador é a receita que transforma a amostra num palpite, e como a amostra é sorteada, o palpite também é aleatório.</p>
+
+  <h3>As três palavras que não podem se misturar</h3>
+  <div class="rolagem"><table>
+    <tr><th>Palavra</th><th>O que é</th><th>Exemplo</th></tr>
+    <tr><td>Parâmetro</td><td>Número fixo e desconhecido da população</td><td>µ, a altura média de todas as crianças de 12 anos</td></tr>
+    <tr><td>Estimador</td><td>A fórmula, antes de sortear. É uma variável aleatória</td><td>X̄ = (X₁ + … + Xₙ)/n</td></tr>
+    <tr><td>Estimativa</td><td>O número que sai depois de observar a amostra</td><td>x̄ = 150 cm</td></tr>
+  </table></div>
+  <p>Letra maiúscula (X̄) é o estimador, ainda aleatório. Letra minúscula (x̄) é o número observado. Amostra aleatória significa: X₁, …, Xₙ independentes, todas com a mesma distribuição da população.</p>
+
+  <h3>O que é um bom estimador: a analogia do tiro ao alvo</h3>
+  <p>Imagine que o centro do alvo é o parâmetro e cada tiro é a estimativa de uma amostra diferente.</p>
+  <div class="alvos" id="alvos"></div>
+  <div class="rolagem"><table>
+    <tr><th>Qualidade</th><th>Significado</th><th>Como verificar</th></tr>
+    <tr><td>Não-viesado</td><td>Em média, acerta o centro</td><td>E(T) = θ</td></tr>
+    <tr><td>Precisão</td><td>Tiros juntos entre si</td><td>Var(T) pequena; o erro padrão é √Var(T)</td></tr>
+    <tr><td>Eficiência</td><td>Entre dois não-viesados, o de menor variância é o melhor</td><td>Compare Var(T₁) e Var(T₂)</td></tr>
+    <tr><td>EQM</td><td>Quão longe do centro, juntando viés e espalhamento</td><td>EQM = Var(T) + viés²</td></tr>
+    <tr><td>Consistência</td><td>Com amostra cada vez maior, cola no alvo</td><td>E(Tₙ) → θ e Var(Tₙ) → 0</td></tr>
+  </table></div>
+
+  <div class="exemplo">
+    <p class="enun">Para estimar µ, compare µ̂₁ = (X₁ + X₂)/2 com X̄.</p>
+    <ol>
+      <li>Viés: E(µ̂₁) = (µ + µ)/2 = µ e E(X̄) = µ. Os dois são não-viesados.</li>
+      <li>Variância: Var(µ̂₁) = σ²/2 e Var(X̄) = σ²/n.</li>
+      <li>Eficiência: para n &gt; 2, X̄ tem variância menor, então é mais eficiente.</li>
+      <li>Consistência: σ²/n → 0, então X̄ é consistente. σ²/2 nunca diminui, então µ̂₁ não é: ele joga fora o resto da amostra.</li>
+    </ol>
+  </div>
+  <p>O mesmo raciocínio vale para a proporção (p̂ = X̄ é consistente; usar só o primeiro ensaio, X₁, não é) e para a variância:</p>
+  <div class="formula">\[ \hat\sigma^2=\frac{1}{n}\sum (X_i-\bar X)^2:\ \ E(\hat\sigma^2)=\frac{n-1}{n}\sigma^2\ \text{(viesado)} \qquad S^2=\frac{1}{n-1}\sum (X_i-\bar X)^2:\ \ E(S^2)=\sigma^2 \]</div>
+  <p>Os dois são consistentes, mas só S² é não-viesado. Por isso a calculadora e o curso usam n − 1.</p>
+
+  <h3>Como se comporta a média amostral</h3>
+  <p>Juntando o Dia 4: \(E(\bar X)=\mu\) e \(Var(\bar X)=\sigma^2/n\). Falta saber o formato da distribuição. Há dois casos:</p>
+  <div class="caixa def">
+    <h4>Se a população é Normal</h4>
+    <p>X̄ é Normal <strong>exatamente</strong>, para qualquer n (soma de Normais é Normal): \(\bar X \sim N(\mu, \sigma^2/n)\).</p>
+  </div>
+  <div class="caixa def">
+    <h4>Se a população é qualquer coisa: Teorema Limite Central</h4>
+    <p>Para n grande, X̄ é <strong>aproximadamente</strong> Normal, não importa o formato original (Exponencial, dado, Bernoulli…):</p>
+    <p>\[ \frac{\bar X-\mu}{\sigma/\sqrt n} \approx N(0,1) \]</p>
+  </div>
+  <p>Intuição: na média, os valores altos e baixos se compensam, e a soma de muitos pedacinhos aleatórios sempre ganha cara de sino. Quem fica Normal é a <strong>média</strong> (ou a soma), não cada X.</p>
+  <p>Aplicações diretas: a proporção amostral fica \(\hat p \approx N(p,\ p(1-p)/n)\), e uma Binomial(n, p) fica aproximadamente N(np, np(1 − p)) quando np(1 − p) ≥ 5.</p>
+  <div class="caneta">Na resposta, <b>escreva qual resultado usou</b>: “soma de Normais independentes” quando a população é Normal, “Teorema Limite Central” quando não é. Isso vale ponto.</div>
+
+  <div class="exemplo">
+    <p class="enun">E3, ex. 2: conversas duram Exponencial de média 3 min. Chance de 81 conversas somarem mais de 290 min?</p>
+    <ol>
+      <li>Exponencial com média 3 tem variância 3² = 9.</li>
+      <li>Soma de 81: média 243, variância 729, σ = 27.</li>
+      <li>A população não é Normal, mas n = 81 é grande: TLC.</li>
+      <li>z = (290 − 243)/27 = 1,74; P(Z &gt; 1,74) = 0,5 − 0,45907.</li>
+    </ol>
+    <span class="resp">≈ 0,041</span>
+  </div>
+
+  <h3 class="titulo-teste">Teste-se</h3>
+  <details class="teste"><summary>E3, ex. 3: vacina imuniza 80%. Numa amostra de 100, qual a chance de a proporção de imunizados ser menor que 0,75?</summary>
+    <div class="gab">p̂ ≈ N(0,8; 0,8 × 0,2/100), erro padrão 0,04. z = (0,75 − 0,80)/0,04 = −1,25. P(Z &lt; −1,25) = <strong>0,106</strong>. Resultado: TLC.</div></details>
+  <details class="teste"><summary>Lista 09, ex. 6: vigas ~ N(3, 2²). (b) Chance de a média de 20 vigas ser pelo menos 2,5? (c) E com 40 vigas, sem supor Normal?</summary>
+    <div class="gab">(b) X̄ ~ N(3; 4/20), erro padrão 0,447. P(Z ≥ −1,12) = <strong>0,869</strong> (resultado exato: soma de Normais). (c) Pelo TLC, X̄ ≈ N(3; 4/40), erro padrão 0,316. P(Z ≥ −1,58) = <strong>0,943</strong>.</div></details>
+  <details class="teste"><summary>Lista 09, ex. 1(a): X Normal com variância 25. Calcule P(|X̄ − µ| ≤ 2) para n = 4, 16 e 50 e comente.</summary>
+    <div class="gab">O erro padrão é 5/√n. n = 4: P(|Z| ≤ 0,8) = <strong>0,576</strong>. n = 16: P(|Z| ≤ 1,6) = <strong>0,890</strong>. n = 50: P(|Z| ≤ 2,83) = <strong>0,995</strong>. Quanto maior a amostra, mais a média amostral cola em µ: é a consistência na prática.</div></details>
+  <details class="teste"><summary>Lista 09, ex. 4(b): 10% dos aluguéis atrasam. De 150 boletos, chance de 17 ou mais atrasarem? Compare exato e Normal.</summary>
+    <div class="gab">Exato (Binomial): 0,331. Normal N(15; 13,5), σ = 3,674. Com correção de continuidade, P(X ≥ 16,5) = P(Z ≥ 0,41) ≈ <strong>0,342</strong>. A aproximação é boa porque np(1 − p) = 13,5 ≥ 5. No item (a), com n = 20, np(1 − p) = 1,8 e a aproximação fica ruim (exato 0,677 contra ≈ 0,645).</div></details>
+</section>
+
+<!-- ============ MÓDULO 6 ============ -->
+<section class="modulo" id="ic">
+  <span class="dia">Dia 6</span>
+  <h2>Intervalos de confiança</h2>
+  <p class="ideia">Em vez de um único palpite, damos uma faixa: estimativa ± margem de erro. A confiança diz com que frequência esse método acerta.</p>
+
+  <h3>A ideia, com uma rede de pesca</h3>
+  <p>O parâmetro µ é um peixe parado num ponto do lago: ele não se mexe, só não sabemos onde está. Cada amostra é uma rede que você joga. Um IC de 95% é um jeito de jogar a rede que, repetido muitas vezes, pega o peixe em 95% dos lances.</p>
+  <p>Depois de jogar, a rede pegou ou não pegou. Por isso a frase correta fala do <strong>método</strong>, não daquele intervalo específico.</p>
+  <div class="caneta">Errado: “há 95% de chance de µ estar entre 148,4 e 151,6”. µ não é aleatório. <b>Certo:</b> “se repetíssemos a amostragem muitas vezes, cerca de 95% dos intervalos construídos assim conteriam µ”.</div>
+
+  <h3>De onde sai a fórmula</h3>
+  <p>Sabemos do Dia 5 que \((\bar X-\mu)/(\sigma/\sqrt n)\) é N(0,1). Então, com 95% de probabilidade, ele fica entre −1,96 e 1,96. Isolando µ:</p>
+  <div class="formula">\[ \boxed{\ \bar x \ \pm\ z\,\frac{\sigma}{\sqrt n}\ } \qquad \varepsilon = z\,\frac{\sigma}{\sqrt n}\ \text{é a margem de erro} \]</div>
+  <p>Todo IC deste curso tem esse formato: <strong>estimativa ± (quantil) × (erro padrão)</strong>. Só muda qual quantil e qual erro padrão.</p>
+  <p>A margem de erro cresce com mais confiança (z maior) e com mais variabilidade (σ maior), e diminui com mais amostra. Para cortar a margem pela metade, você precisa de 4 vezes mais amostra, por causa do √n.</p>
+
+  <div class="exemplo">
+    <p class="enun">E4: altura de crianças, σ = 5 cm, n = 36, x̄ = 150. IC de 95%?</p>
+    <ol>
+      <li>Erro padrão: 5/√36 = 0,833.</li>
+      <li>Margem: 1,96 × 0,833 = 1,63.</li>
+      <li>Intervalo: 150 ± 1,63.</li>
+    </ol>
+    <span class="resp">[148,37; 151,63] cm</span>
+  </div>
+
+  <h3>Quando σ é desconhecido: a distribuição t</h3>
+  <p>Na vida real quase nunca sabemos σ, e usamos o desvio da amostra, s. Só que s também varia de amostra para amostra, e isso acrescenta incerteza. Para compensar, trocamos z por t, que tem caudas mais grossas:</p>
+  <div class="formula">\[ \frac{\bar X-\mu}{S/\sqrt n}\sim t_{n-1} \qquad\Longrightarrow\qquad \bar x \ \pm\ t_{n-1}\,\frac{s}{\sqrt n} \qquad s^2=\frac{\sum x_i^2-n\bar x^2}{n-1} \]</div>
+  <p><strong>Como ler a tabela t do curso:</strong> a coluna p é a área <em>fora</em> do intervalo, somando as duas caudas. Para 95% use a coluna 5%; para 90%, a coluna 10%. A linha é n − 1 (graus de liberdade). Com mais de 120 graus, use z.</p>
+  <div class="exemplo">
+    <p class="enun">E5: 18 estudantes, Σx = 6840,4 e Σx² = 2.626.636. IC de 95% para o tempo médio em redes sociais, σ desconhecido.</p>
+    <ol>
+      <li>x̄ = 6840,4/18 = 380,02.</li>
+      <li>s² = (2.626.636 − 18 × 380,02²)/17 = 1597,8, então s = 39,97.</li>
+      <li>Tabela t: linha 17, coluna 5% → 2,110.</li>
+      <li>Margem: 2,11 × 39,97/√18 = 19,88.</li>
+    </ol>
+    <span class="resp">[360,14; 399,90] min (com σ = 40 conhecido daria [361,54; 398,50], mais estreito)</span>
+  </div>
+
+  <h3>Intervalo para proporção</h3>
+  <p>Proporção é a média de zeros e uns, então a lógica é a mesma, com erro padrão \(\sqrt{p(1-p)/n}\). O problema: esse erro depende de p, que é justamente o que não sabemos. Há duas saídas:</p>
+  <div class="rolagem"><table>
+    <tr><th>Abordagem</th><th>Intervalo</th><th>Quando</th></tr>
+    <tr><td>Otimista</td><td>p̂ ± z √(p̂(1 − p̂)/n)</td><td>Usa a própria estimativa. Mais estreito</td></tr>
+    <tr><td>Conservadora</td><td>p̂ ± z / √(4n)</td><td>Usa o pior caso, p(1 − p) ≤ 1/4. Mais largo, mas seguro</td></tr>
+  </table></div>
+  <p>O pior caso é p = 0,5, porque p(1 − p) é uma parábola com máximo 1/4 nesse ponto. Se p̂ estiver perto de 0,5, os dois intervalos quase coincidem.</p>
+  <div class="exemplo">
+    <p class="enun">E6: vacina em 200 pessoas, 160 imunizadas. ICs de 95%.</p>
+    <ol>
+      <li>p̂ = 160/200 = 0,80.</li>
+      <li>Otimista: erro padrão √(0,8 × 0,2/200) = 0,0283; margem 1,96 × 0,0283 = 0,055.</li>
+      <li>Conservador: margem 1,96/√800 = 0,069.</li>
+    </ol>
+    <span class="resp">Otimista [0,745; 0,855] &nbsp; Conservador [0,731; 0,869]</span>
+  </div>
+
+  <h3>Tamanho da amostra</h3>
+  <p>É a mesma fórmula, só que a pergunta vem ao contrário: você escolhe a margem ε e a confiança, e isola n.</p>
+  <div class="formula">\[ \text{média: } n=\left(\frac{z\,\sigma}{\varepsilon}\right)^2 \qquad\qquad \text{proporção: } n=\left(\frac{z}{\varepsilon}\right)^2 p(1-p) \]</div>
+  <ul>
+    <li>Arredonde <strong>sempre para cima</strong>: 1691,3 vira 1692.</li>
+    <li>Sem informação sobre p, use p(1 − p) = 1/4.</li>
+    <li>Com informação (“p é pelo menos 0,8”, “no máximo 30%”), use o valor permitido mais próximo de 0,5, porque é o pior caso dentro da faixa.</li>
+  </ul>
+  <div class="exemplo">
+    <p class="enun">E6: pesquisa eleitoral com erro de 2 pontos e 95% de confiança. (b) E se o candidato sabe que não passa de 30%?</p>
+    <ol>
+      <li>(a) n = (1,96/0,02)² × 0,25 = 9604 × 0,25 = 2401.</li>
+      <li>(b) Com p ≤ 0,3, o pior caso é p = 0,3: p(1 − p) = 0,21.</li>
+      <li>n = 9604 × 0,21 = 2016,8, arredonda para 2017. A informação é relevante.</li>
+    </ol>
+    <span class="resp">(a) 2401 &nbsp; (b) 2017</span>
+  </div>
+
+  <h3 class="titulo-teste">Teste-se</h3>
+  <details class="teste"><summary>Lista 09, ex. 13: fábrica diz que válvulas duram 800 h. Testaram 144, com média 781,2 h e desvio 92,4 h. IC de 95% e conclusão?</summary>
+    <div class="gab">Erro padrão 92,4/12 = 7,7. Com n = 144 grande, use z: 781,2 ± 1,96 × 7,7 = <strong>[766,1; 796,3] h</strong>. 800 h está fora do intervalo, então os dados não sustentam a afirmação da fábrica. Suposições: amostra aleatória, n grande (TLC), s estimando σ.</div></details>
+  <details class="teste"><summary>Lista 09, ex. 7: quantos voluntários para errar menos de 2% com 90% de confiança? E se p ≥ 0,8?</summary>
+    <div class="gab">z = 1,645. (a) n = (1,645/0,02)² × 0,25 = 1691,3 → <strong>1692</strong>. (b) Com p ≥ 0,8, o pior caso é 0,8 × 0,2 = 0,16: n = 6765 × 0,16 → <strong>1083</strong>. Houve redução.</div></details>
+  <details class="teste"><summary>Lista 09, ex. 9: 438 de 625 pessoas preferem o celular A. IC de 90% para p.</summary>
+    <div class="gab">p̂ = 0,7008. Otimista: 0,7008 ± 1,645 × 0,0183 = <strong>[0,671; 0,731]</strong>. Conservador: 0,7008 ± 1,645/50 = [0,668; 0,734].</div></details>
+  <details class="teste"><summary>Lista 09, ex. 10: piloto com 60% favoráveis. (a) n para erro de 0,05 com 80%? (b) Se a amostra final deu 51%, IC de 95%?</summary>
+    <div class="gab">(a) z = 1,28: n = (1,28/0,05)² × 0,6 × 0,4 = 157,3 → <strong>158</strong>. (b) 0,51 ± 1,96 × √(0,51 × 0,49/158) = 0,51 ± 0,078 = <strong>[0,432; 0,588]</strong>.</div></details>
+  <details class="teste"><summary>Lista 09, ex. 11: n = 400, x̄ = 800 h, s = 100 h. (a) IC de 99%. (b) Que confiança tem 800 ± 0,98? (c) Que n daria 95% para 800 ± 7,84?</summary>
+    <div class="gab">Erro padrão 5. (a) 800 ± 2,576 × 5 = <strong>[787,1; 812,9]</strong>. (b) 0,98 = z × 5 → z = 0,196 → confiança ≈ <strong>15,5%</strong>. (c) 7,84 = 1,96 × 100/√n → √n = 25 → <strong>n = 625</strong>.</div></details>
+  <details class="teste"><summary>Lista 09, ex. 5(a): X ~ N(µ, 36), n = 50, x̄ = 18,5. ICs de 91%, 96% e 99%.</summary>
+    <div class="gab">Erro padrão 6/√50 = 0,849. 91% (z = 1,695): <strong>[17,06; 19,94]</strong>. 96% (z = 2,054): <strong>[16,76; 20,24]</strong>. 99% (z = 2,576): <strong>[16,31; 20,69]</strong>. Mais confiança, intervalo mais largo.</div></details>
+</section>
+
+<!-- ============ NA PROVA ============ -->
+<section class="modulo" id="prova">
+  <span class="dia">Dia 7</span>
+  <h2>Na prova</h2>
+  <p class="ideia">A parte mais difícil é reconhecer que tipo de questão é. Procure no enunciado a expressão da esquerda: ela diz qual ferramenta usar.</p>
+  <div class="rolagem"><table>
+    <tr><th>Se o enunciado diz…</th><th>Use</th><th>Revise</th></tr>
+    <tr><td>“verifique se é densidade”, “ache c”</td><td>f ≥ 0 e área total 1</td><td><a href="#continuas">Dia 2</a></td></tr>
+    <tr><td>“tempo até”, “taxa”, “dado que já passou”</td><td>Exponencial: P(X &gt; t) = e<sup>−λt</sup>, sem memória</td><td><a href="#continuas">Dia 2</a></td></tr>
+    <tr><td>“ao acaso entre”, “qualquer ponto”</td><td>Uniforme: comprimento ÷ total</td><td><a href="#continuas">Dia 2</a></td></tr>
+    <tr><td>Normal com média e desvio</td><td>Z = (X − µ)/σ e tabela</td><td><a href="#normal">Dia 1</a></td></tr>
+    <tr><td>“o valor tal que x%…”, “limites das classes”</td><td>x = µ + zσ</td><td><a href="#normal">Dia 1</a></td></tr>
+    <tr><td>“pelo menos”, sem saber a distribuição</td><td>Chebyshev</td><td><a href="#normal">Dia 1</a></td></tr>
+    <tr><td>“densidade conjunta”, “marginal”, “condicional”</td><td>Desenhe o suporte e integre a outra variável</td><td><a href="#bivariadas">Dia 3</a></td></tr>
+    <tr><td>Dois horários ao acaso, “se encontrarem”</td><td>Área no quadrado</td><td><a href="#somas">Dia 4</a></td></tr>
+    <tr><td>“peso total de n”, soma de Normais</td><td>N(nµ, nσ²)</td><td><a href="#somas">Dia 4</a></td></tr>
+    <tr><td>“média de n”, população Normal</td><td>X̄ ~ N(µ, σ²/n) exato</td><td><a href="#inferencia">Dia 5</a></td></tr>
+    <tr><td>“média ou soma de n”, população qualquer</td><td>TLC</td><td><a href="#inferencia">Dia 5</a></td></tr>
+    <tr><td>“viés”, “eficiente”, “consistente”</td><td>E(T), Var(T) e seus limites</td><td><a href="#inferencia">Dia 5</a></td></tr>
+    <tr><td>“intervalo de confiança” com σ dado</td><td>x̄ ± z σ/√n</td><td><a href="#ic">Dia 6</a></td></tr>
+    <tr><td>IC só com a amostra, n pequeno</td><td>x̄ ± t s/√n, n − 1 graus</td><td><a href="#ic">Dia 6</a></td></tr>
+    <tr><td>“proporção”, “x de n pessoas”</td><td>p̂ ± z × erro padrão</td><td><a href="#ic">Dia 6</a></td></tr>
+    <tr><td>“quantos”, “tamanho da amostra”</td><td>Isole n e arredonde para cima</td><td><a href="#ic">Dia 6</a></td></tr>
+  </table></div>
+
+  <h3>Antes de entregar cada questão</h3>
+  <ul>
+    <li>Usei σ, e não a variância, na padronização?</li>
+    <li>Soma de n coisas tem variância nσ², não n²σ²?</li>
+    <li>Arredondei o tamanho da amostra para cima?</li>
+    <li>Escrevi qual resultado usei (TLC, soma de Normais, Chebyshev)?</li>
+    <li>A probabilidade final está entre 0 e 1 e faz sentido com o desenho?</li>
+  </ul>
+  <div class="dica"><b>Uma semana dá.</b> Esta matéria é muito repetitiva: quase tudo é padronizar e consultar a tabela, aplicado a objetos diferentes. Se você fizer os exercícios de cada dia, vai chegar na prova reconhecendo os padrões.</div>
+</section>
+
+</main>
+<footer class="coluna">
+  Baseada nos slides e listas de MAE0119 (IME-USP, 2º semestre de 2026). Referências do curso: Bussab &amp; Morettin, caps. 7 a 11; Magalhães &amp; Lima, caps. 5 a 7.
+</footer>
+
+<script>
+(function(){
+  // ---------- Normal ----------
+  function erf(x){
+    var s = x < 0 ? -1 : 1; x = Math.abs(x);
+    var t = 1/(1+0.3275911*x);
+    var y = 1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x);
+    return s*y;
+  }
+  function Phi(z){ if(z===Infinity) return 1; if(z===-Infinity) return 0; return 0.5*(1+erf(z/Math.SQRT2)); }
+  function dens(z){ return Math.exp(-z*z/2)/Math.sqrt(2*Math.PI); }
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs){ var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); return e; }
+
+  // desenha sino em <svg> com viewBox w x h, sombreando [a,b] em escala z
+  function sino(svg, a, b, opt){
+    opt = opt || {};
+    var vb = svg.viewBox.baseVal, W = vb.width, H = vb.height;
+    var pad = opt.pad || 10, base = H - (opt.baixo || 22), topo = opt.topo || 8;
+    var zmin = -3.6, zmax = 3.6;
+    function X(z){ return pad + (z - zmin)/(zmax - zmin)*(W - 2*pad); }
+    function Y(d){ return base - d/dens(0)*(base - topo); }
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    var lo = Math.max(a, zmin), hi = Math.min(b, zmax);
+    if (hi > lo){
+      var p = 'M' + X(lo) + ' ' + base;
+      for (var z = lo; z <= hi; z += 0.02) p += ' L' + X(z).toFixed(1) + ' ' + Y(dens(z)).toFixed(1);
+      p += ' L' + X(hi) + ' ' + Y(dens(hi)).toFixed(1) + ' L' + X(hi) + ' ' + base + ' Z';
+      svg.appendChild(el('path', {d:p, fill:'var(--area)'}));
+    }
+    var c = '';
+    for (var z2 = zmin; z2 <= zmax + 1e-9; z2 += 0.04) c += (c ? ' L' : 'M') + X(z2).toFixed(1) + ' ' + Y(dens(z2)).toFixed(1);
+    svg.appendChild(el('path', {d:c, fill:'none', stroke:'var(--azul)', 'stroke-width': opt.traco || 2}));
+    svg.appendChild(el('line', {x1:pad, y1:base, x2:W-pad, y2:base, stroke:'currentColor', 'stroke-width':1, opacity:.6}));
+    (opt.marcas || []).forEach(function(m){
+      var x = X(m.z);
+      svg.appendChild(el('line', {x1:x, y1:base, x2:x, y2:base+4, stroke:'currentColor'}));
+      var t = el('text', {x:x, y:base+16, 'font-size': opt.fonte || 11, 'text-anchor':'middle', fill:'currentColor'});
+      t.textContent = m.r; svg.appendChild(t);
+    });
+    if (opt.rotulo){
+      var t2 = el('text', {x:W/2, y:Y(dens(0))+ (opt.rotuloY || 40), 'font-size': opt.fonteRotulo || 13, 'text-anchor':'middle', fill:'var(--tinta)', 'font-weight':'700'});
+      t2.textContent = opt.rotulo; svg.appendChild(t2);
+    }
+  }
+
+  // capa
+  var capa = document.getElementById('sinoCapa');
+  if (capa) sino(capa, -1.96, 1.96, {pad:20, baixo:30, topo:10, traco:3, fonte:14, fonteRotulo:18, rotuloY:70,
+    rotulo:'95% da área', marcas:[{z:-1.96,r:'µ − 1,96σ'},{z:0,r:'µ'},{z:1.96,r:'µ + 1,96σ'}]});
+
+  // casos da tabela
+  var casos = [
+    {a:0.8, b:Infinity, t:'P(Z > a)', f:'0,5 − tab(a)'},
+    {a:-Infinity, b:0.8, t:'P(Z < a)', f:'0,5 + tab(a)'},
+    {a:-Infinity, b:-0.8, t:'P(Z < −a)', f:'0,5 − tab(a), por simetria'},
+    {a:-0.7, b:1.3, t:'P(−a < Z < b)', f:'tab(a) + tab(b)'},
+    {a:0.6, b:1.8, t:'P(a < Z < b), mesmo lado', f:'tab(b) − tab(a)'},
+    {a:-1.2, b:1.2, t:'P(−c < Z < c) = γ', f:'procure γ/2 no miolo da tabela'}
+  ];
+  var box = document.getElementById('casosTabela');
+  casos.forEach(function(k){
+    var d = document.createElement('div'); d.className = 'caso';
+    var s = el('svg', {viewBox:'0 0 200 80', 'class':'sino', role:'img', 'aria-label':k.t});
+    d.appendChild(s);
+    var p = document.createElement('p'); p.innerHTML = '<strong>' + k.t + '</strong><br>' + k.f;
+    d.appendChild(p); box.appendChild(d);
+    sino(s, k.a, k.b, {pad:6, baixo:6, topo:6, traco:1.6});
+  });
+
+  // calculadora
+  function num(id){ var v = document.getElementById(id).value; return v === '' ? null : parseFloat(v.replace(',', '.')); }
+  function fmt(x, d){ return x.toFixed(d).replace('.', ','); }
+  function calc(){
+    var mu = num('cMu'), s = num('cSig'), a = num('cA'), b = num('cB');
+    var out = document.getElementById('calcSaida'), svg = document.getElementById('calcSino');
+    if (mu === null || s === null || !(s > 0)){ out.textContent = 'Informe a média e um desvio maior que zero.'; return; }
+    var za = a === null ? -Infinity : (a - mu)/s, zb = b === null ? Infinity : (b - mu)/s;
+    if (za > zb){ out.textContent = 'O limite “de” precisa ser menor que o “até”.'; return; }
+    var p = Phi(zb) - Phi(za);
+    var marcas = [];
+    if (isFinite(za)) marcas.push({z:Math.max(-3.5, Math.min(3.5, za)), r:'z = ' + fmt(za, 2)});
+    if (isFinite(zb)) marcas.push({z:Math.max(-3.5, Math.min(3.5, zb)), r:'z = ' + fmt(zb, 2)});
+    sino(svg, za, zb, {pad:8, baixo:22, topo:8, marcas:marcas});
+    var txt = 'P(' + (a === null ? '' : fmt(a, 2) + ' < ') + 'X' + (b === null ? '' : ' < ' + fmt(b, 2)) + ') = ';
+    out.innerHTML = txt + '<span class="num">' + fmt(p, 4) + '</span><br>Padronizado: ' +
+      (isFinite(za) ? 'z de ' + fmt(za, 2) : 'de −∞') + (isFinite(zb) ? ' até ' + fmt(zb, 2) : ' até +∞') + '.';
+  }
+  ['cMu','cSig','cA','cB'].forEach(function(id){ document.getElementById(id).addEventListener('input', calc); });
+  calc();
+
+  // alvos
+  var seed = 7; function rnd(){ seed = (seed*16807) % 2147483647; return seed/2147483647; }
+  function gauss(){ var u = rnd() || 1e-9, v = rnd(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+  var alvos = [
+    {dx:0, dy:0, sp:20, t:'Sem viés, pouco preciso'},
+    {dx:-18, dy:-14, sp:20, t:'Com viés, pouco preciso'},
+    {dx:0, dy:0, sp:7, t:'Sem viés e preciso: o ideal'},
+    {dx:-26, dy:24, sp:6, t:'Com viés, mas preciso'}
+  ];
+  var ab = document.getElementById('alvos');
+  alvos.forEach(function(a){
+    var d = document.createElement('div'); d.className = 'alvo';
+    var s = el('svg', {viewBox:'0 0 120 120', role:'img', 'aria-label':a.t});
+    [52,38,24,10].forEach(function(r){ s.appendChild(el('circle', {cx:60, cy:60, r:r, fill:'none', stroke:'currentColor', opacity:.35})); });
+    s.appendChild(el('circle', {cx:60, cy:60, r:3, fill:'var(--azul)'}));
+    for (var i = 0; i < 14; i++){
+      var x = 60 + a.dx + gauss()*a.sp*0.6, y = 60 + a.dy + gauss()*a.sp*0.6;
+      s.appendChild(el('circle', {cx:x.toFixed(1), cy:y.toFixed(1), r:2.6, fill:'var(--vermelho)'}));
+    }
+    d.appendChild(s);
+    var p = document.createElement('p'); p.textContent = a.t; d.appendChild(p);
+    ab.appendChild(d);
+  });
+
+  // plano com progresso salvo
+  var CH = 'mae0119-dias';
+  var marcados = {};
+  try { marcados = JSON.parse(localStorage.getItem(CH) || '{}') || {}; } catch(e){ marcados = {}; }
+  var caixas = document.querySelectorAll('#listaDias input');
+  function atualiza(){
+    var n = 0;
+    caixas.forEach(function(c){ c.closest('li').classList.toggle('feito', c.checked); if (c.checked) n++; });
+    document.getElementById('barra').style.width = (n/caixas.length*100) + '%';
+  }
+  caixas.forEach(function(c){
+    c.checked = !!marcados[c.id];
+    c.addEventListener('change', function(){
+      marcados[c.id] = c.checked;
+      try { localStorage.setItem(CH, JSON.stringify(marcados)); } catch(e){}
+      atualiza();
+    });
+  });
+  atualiza();
+})();
+</script>
+</body>
+</html>
